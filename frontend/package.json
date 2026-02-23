@@ -4,7 +4,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build": "cp ./src/main.js ../build/client/app.js && cp ./public/index.html ../build/client/index.html"
+    "build": "mkdir -p ../build/client && cp ./src/main.js ../build/client/app.js && cp ./public/index.html ../build/client/index.html"
   },
   "keywords": [],
   "author": "",

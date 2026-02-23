@@ -4,6 +4,13 @@ import express from 'express'
 const app = express()
 const PORT = 3000
 
-app.get('/', (req, res) => res.send('Hello express'))
+// const serverRoot =
+//   '/home/yourock/d/Mentoring/students/artur/monorepo/backend/static/'
+const clientFolder =
+  '/home/yourock/d/Mentoring/students/artur/monorepo/build/client/'
+
+app.use('/', express.static(clientFolder))
+
+app.get('/hello', (req, res) => res.send('Hello express'))
 
 app.listen(PORT, () => console.log('server started!'))

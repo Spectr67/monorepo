@@ -4,7 +4,11 @@
   "type": "module",
   "main": "index.js",
   "devDependencies": {},
-  "scripts": {},
+  "scripts": {
+    "build:fe": "npm run build --workspace=@monorepo/frontend",
+    "build:be": "npm run build --workspace=@monorepo/backend",
+    "build": "npm run build:fe && npm run build:be"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
