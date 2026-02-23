@@ -9,8 +9,10 @@ const PORT = 3000
 const clientFolder =
   '/home/yourock/d/Mentoring/students/artur/monorepo/build/client/'
 
+// C:\Users\Рабочий стол\папка с пробелами'
+
 app.use('/', express.static(clientFolder))
 
-app.get('/hello', (req, res) => res.send('Hello express'))
+app.get('/hello', (req, res) => res.send('Hello express!!!!!!????'))
 
-app.listen(PORT, () => console.log('server started!'))
+app.listen(PORT, () => console.log('server started'))
