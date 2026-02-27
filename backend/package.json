@@ -4,7 +4,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build": "mkdir -p ../build/server && cp ./src/main.js ../build/server/app.js"
+    "build": "mkdir -p ../build/server && cp ./src/main.js ../build/server/app.js",
+    "dev": "nodemon ./src/main.js"
   },
   "keywords": [],
   "author": "",

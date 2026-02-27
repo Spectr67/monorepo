@@ -4,15 +4,20 @@ import express from 'express'
 const app = express()
 const PORT = 3000
 
-// const serverRoot =
+// C:\Users\Рабочий стол\папка с пробелами'
+
+// const clientFolder =
 //   '/home/yourock/d/Mentoring/students/artur/monorepo/backend/static/'
+
 const clientFolder =
   '/home/yourock/d/Mentoring/students/artur/monorepo/build/client/'
 
-// C:\Users\Рабочий стол\папка с пробелами'
-
+// TODO: сделать так чтоб в dev режиме не раздавалась клиентская папка
 app.use('/', express.static(clientFolder))
 
-app.get('/hello', (req, res) => res.send('Hello express!!!!!!????'))
+app.get('/api/v0/hello', (req, res) => res.send('Hello express api!'))
+app.get('/api/v0/{*any}', (req, res) => res.status(404).send('not found...'))
 
-app.listen(PORT, () => console.log('server started'))
+app.listen(PORT, () =>
+  console.log('server started at:', 'http://localhost:' + PORT)
+)
