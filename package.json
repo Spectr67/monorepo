@@ -6,7 +6,8 @@
   "scripts": {
     "build:fe": "npm run build --workspace=@monorepo/frontend",
     "build:be": "npm run build --workspace=@monorepo/backend",
-    "build": "npm run build:fe && npm run build:be"
+    "build": "npm run build:fe && npm run build:be",
+    "start": "node ./build/server/app.js"
   },
   "keywords": [],
   "author": "",
