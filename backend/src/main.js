@@ -15,7 +15,10 @@ const clientFolder =
 // TODO: сделать так чтоб в dev режиме не раздавалась клиентская папка
 app.use('/', express.static(clientFolder))
 
-app.get('/api/v0/hello', (req, res) => res.send('Hello express api!'))
+app.get('/api/v0/hello', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
+  res.send('122222')
+})
 app.get('/api/v0/{*any}', (req, res) => res.status(404).send('not found...'))
 
 app.listen(PORT, () =>

@@ -1,13 +1,27 @@
-<script setup></script>
+<script>
+export default {
+  data() {
+    return {
+      text: '',
+    }
+  },
+
+  created() {
+    this.loadHello()
+  },
+
+  methods: {
+    async loadHello() {
+      const resp = await fetch('http://localhost:3000/api/v0/hello')
+      const data = await resp.text()
+      this.text = data.toUpperCase()
+    },
+  },
+}
+</script>
 
 <template>
   <h1>You did it!</h1>
-  <p>
-    Visit
-    <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to
-    read the documentation
-  </p>
-  <h2>!!!</h2>
+  <h2>{{ text }}</h2>
+  <button @click="loadHello">Load Hello</button>
 </template>
-
-<style scoped></style>
