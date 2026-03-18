@@ -4,9 +4,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/main.js",
     "hello": "shx echo \"Hi there!\"",
-    "build": "shx rm -rf ../build/server && shx mkdir -p ../build/server && shx cp ./src/main.js ../build/server/app.js"
+    "dev": "nodemon ./src/main.js",
+    "start": "node ../build/server/main.js",
+    "build": "shx rm -rf ../build/server && shx mkdir -p ../build/server && shx cp -r ./src/* ../build/server/"
   },
   "keywords": [],
   "author": "",

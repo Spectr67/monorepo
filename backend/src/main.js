@@ -1,6 +1,9 @@
 import express from 'express'
 // import path from 'node:path'
 
+import './utils.js'
+import './functions/add.js'
+
 const app = express()
 const PORT = 3000
 
@@ -34,8 +37,26 @@ const cars = [
 
 const clientFolder =
   'C:\\Users\\layz3\\OneDrive\\Documents\\Important Stuff\\Arthur\\js_vue\\monorepo\\build\\client'
+
+// 'C:\\Users\\layz3\\OneDrive\\Documents\\Important Stuff\\Arthur\\js_vue\\'
+// '/home/yourock/d/Mentoring/students/artur/'
+
+// ??????????????/<projectRoot>/build/client/
+
+const clientFolder1 =
+  '/home/yourock/d/Mentoring/students/artur/monorepo/build/client/'
+
 // '/home/yourock/d/Mentoring/students/artur/monorepo/build/client/'
 console.log(import.meta.dirname)
+
+const myImport = {
+  meta: {
+    dirname: 'foo/bar/baz',
+  },
+}
+
+console.log(myImport.meta.dirname)
+
 // TODO: сделать так чтоб в dev режиме не раздавалась клиентская папка
 app.use('/', express.static(clientFolder))
 
