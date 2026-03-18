@@ -33,9 +33,9 @@ const cars = [
 ]
 
 const clientFolder =
-  'C/Users/layz3/OneDrive/Documents/Important Stuff/Arthur/js_vue/monorepo/build/client/'
+  'C:\\Users\\layz3\\OneDrive\\Documents\\Important Stuff\\Arthur\\js_vue\\monorepo\\build\\client'
 // '/home/yourock/d/Mentoring/students/artur/monorepo/build/client/'
-
+console.log(import.meta.dirname)
 // TODO: сделать так чтоб в dev режиме не раздавалась клиентская папка
 app.use('/', express.static(clientFolder))
 
