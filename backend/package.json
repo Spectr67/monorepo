@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon ./src/main.js",
     "hello": "shx echo \"Hi there!\"",
-    "build": "shx rm -rf ../build/server && mkdir -p ../build/server && cp ./src/main.js ../build/server/app.js"
+    "build": "shx rm -rf ../build/server && shx mkdir -p ../build/server && shx cp ./src/main.js ../build/server/app.js"
   },
   "keywords": [],
   "author": "",

@@ -25,6 +25,11 @@ const cars = [
     brand: 'Fiat',
     price: 42000,
   },
+  {
+    id: 3,
+    brand: 'mazda',
+    price: 43000,
+  },
 ]
 
 const clientFolder =
