@@ -27,7 +27,7 @@ export default {
 </script>
 
 <template>
-  <h1>You did it!</h1>
+  <h1>You did it?</h1>
   <h2>{{ text }}</h2>
   <button @click="loadHello">Load Hello</button>
   <button @click="loadCars">Load Cars</button>
