@@ -15,7 +15,7 @@ export default [
     price: 42000,
   },
   {
-    id: 3,
+    id: 4,
     brand: 'mazda',
     price: 43000,
   },
