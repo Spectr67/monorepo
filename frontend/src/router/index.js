@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import PageCars from '@/pages/PageCars.vue'
 import PageMain from '@/pages/PageMain.vue'
+import PageCars from '@/pages/PageCars.vue'
 
 const routes = [
   {

@@ -1,5 +1,6 @@
 import { Router } from 'express'
-import cars from './cars.js'
+import { addCar } from './carsModel.js'
+import cars from './carsStorage.js'
 
 const carsRouter = Router()
 
@@ -27,15 +28,18 @@ carsRouter.delete('/cars/:id', (req, res) => {
 })
 
 carsRouter.post('/cars', (req, res) => {
-  const createdCar = { id: (Math.random() * 1000) >>> 0, ...req.body }
-  cars.push(createdCar)
+  const createdCar = addCar(req.body)
   res.status(201).send(createdCar)
 })
 
 carsRouter.patch('/cars/:id', (req, res) => {
   const car = cars.find(car => car.id === +req.params.id)
-  Object.assign(car, req.body)
-  res.status(200).send(car)
+  if (!car) {
+    res.status(404).send('opps')
+  } else {
+    Object.assign(car, req.body)
+    res.status(200).send(car)
+  }
 })
 
 export default carsRouter
