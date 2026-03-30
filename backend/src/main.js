@@ -17,9 +17,18 @@ app.use(express.json())
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PATCH, DELETE, OPTIONS'
+  )
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200)
+  }
+
   next()
 })
-
 app.use('/api/v0', carsRouter)
 
 app.use('/', express.static(staticFolder))
@@ -31,5 +40,5 @@ app.use('/', express.static(staticFolder))
 app.get('/api/v0/{*any}', (req, res) => res.status(404).send('not found...'))
 
 app.listen(PORT, () =>
-  console.log('server started at:', 'http://localhost:' + PORT),
+  console.log('server started at:', 'http://localhost:' + PORT)
 )

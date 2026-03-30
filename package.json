@@ -10,7 +10,7 @@
     "dev:be": "npm run dev --workspace=@monorepo/backend",
     "build": "run-s build:fe build:be",
     "dev": "run-p dev:be dev:fe",
-    "start": "node ./build/server/app.js"
+    "start": "node ./build/server/main.js"
   },
   "keywords": [],
   "author": "",
