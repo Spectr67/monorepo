@@ -1,6 +1,6 @@
 import carsStorage from './carsStorage.js'
 
-function createCar(dto) {
+export function createCar(dto) {
   return {
     id: (Math.random() * 10000) >>> 0,
     ...dto,

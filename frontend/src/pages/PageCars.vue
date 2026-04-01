@@ -1,5 +1,8 @@
 <script>
+import InputForm from './InputForm.vue'
+
 export default {
+  components: { InputForm },
   data() {
     return {
       text: '',
@@ -9,16 +12,10 @@ export default {
   },
 
   created() {
-    // this.loadHello()
     this.loadCars()
   },
 
   methods: {
-    // async loadHello() {
-    //   const resp = await fetch('http://localhost:3000/api/v0/hello')
-    //   const data = await resp.text()
-    //   this.text = data.toUpperCase()
-    // },
     async loadCars() {
       const resp = await fetch('http://localhost:3000/api/v0/cars')
       this.cars = await resp.json()
@@ -68,9 +65,7 @@ export default {
   <h2>Cars</h2>
 
   <div class="add-car">
-    <input v-model="newCar.brand" placeholder="Brand" />
-    <input v-model="newCar.price" placeholder="Price" type="number" />
-    <button @click="postCar">Add Car</button>
+    <InputForm @post="postCar" />
   </div>
 
   <ul>
