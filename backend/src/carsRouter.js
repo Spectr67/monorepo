@@ -1,8 +1,17 @@
 import { Router } from 'express'
-import { addCar } from './carsModel.js'
+import { addCar, getCarsAll } from './carsModel.js'
 import cars from './carsStorage.js'
 
+// const cars = './carsStorage.js'
+// let x = getCarsAll().splice(1, 1)
+
 const carsRouter = Router()
+
+getCarsAll().at(0).id = 666
+
+console.log(cars)
+
+// console.log(getCarsAll() === getCarsAll())
 
 carsRouter.get('/cars', (req, res) => {
   res.status(200).send(cars)

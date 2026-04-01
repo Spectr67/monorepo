@@ -1,0 +1,58 @@
+// first class citizens:
+
+можно записать в переменную
+передать в функцию
+вернуть из функции
+
+
+примитивные типы:
+
+number
+string
+boolean
+undefined
+null
+bigint
+symbol
+
+
+
+непримитивные типы:
+
+массив
+объект
+функция
+
+
+
+
+
+////////////////
+// НЕ first class citizens:
+
+statements:
+
+let
+const 
+import
+if
+else
+for
+while
+break
+continue
+switch
+
+
+console.log(let)
+
+
+
+////////////////
+// first class citizens:
+
+expressions:
+42 - number literal expression
+'s' - string literal expression
+
+42 - 9 - substact expression
