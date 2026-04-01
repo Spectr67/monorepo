@@ -1,13 +1,12 @@
 <script>
 import InputForm from './InputForm.vue'
-
+import { postItem } from '@/API'
 export default {
   components: { InputForm },
   data() {
     return {
       text: '',
       cars: [],
-      newCar: { brand: '', price: '' },
     }
   },
 
@@ -26,17 +25,9 @@ export default {
       })
       this.loadCars()
     },
-    async postCar() {
-      const resp = await fetch('http://localhost:3000/api/v0/cars', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...this.newCar }),
-      })
-      const addedCar = await resp.json()
+    async postCar(dto) {
+      const addedCar = await postItem(dto, 'cars')
       this.cars.push(addedCar)
-
-      this.newCar.brand = ''
-      this.newCar.price = ''
     },
     editCar(car) {
       car.isEditing = true
@@ -73,7 +64,7 @@ export default {
       <div class="car-left">
         <div v-if="!car.isEditing">
           <b>{{ car.brand }}</b>
-          <i>{{ car.price }}</i>
+          <b>{{ car.price }}</b>
         </div>
         <div v-else class="car-edit">
           <input v-model="car.tempBrand" placeholder="Brand" />
@@ -92,6 +83,9 @@ export default {
 </template>
 
 <style scoped>
+b {
+  padding: 15px;
+}
 h2 {
   margin-bottom: 1rem;
   font-family: Arial, sans-serif;
