@@ -1,3 +1,4 @@
+Полный исправленный CarItem.vue
 <script>
 export default {
   props: ['car'],
@@ -14,8 +15,8 @@ export default {
       </div>
 
       <div v-else class="car-edit">
-        <input v-model="car.tempBrand" placeholder="Brand" />
-        <input v-model="car.tempPrice" type="number" placeholder="Price" />
+        <input v-model="car.brand" placeholder="Brand" />
+        <input v-model="car.price" type="number" placeholder="Price" />
       </div>
     </div>
 
@@ -55,5 +56,11 @@ li {
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 5px;
+}
+input {
+  padding: 0.3rem 0.5rem;
+}
+b {
+  padding: 15px;
 }
 </style>

@@ -1,50 +1,59 @@
 <script>
 import InputForm from '../components/InputForm.vue'
-import { postItem } from '@/carsApi'
 import CarsList from './CarsList.vue'
+import { postItem, loadCars, deleteCar, updateCar } from '../carsApi'
+
 export default {
   components: { InputForm, CarsList },
+
   data() {
     return {
-      text: '',
       cars: [],
     }
   },
 
-  created() {
-    this.loadCars()
+  async created() {
+    await this.loadCars()
   },
 
   methods: {
     async loadCars() {
-      const resp = await fetch('http://localhost:3000/api/v0/cars')
-      this.cars = await resp.json()
+      const data = await loadCars()
+
+      this.cars = data.map(car => ({
+        ...car,
+        isEditing: false,
+      }))
     },
-    async deleteCar(id) {
-      const resp = await fetch(`http://localhost:3000/api/v0/cars/${id}`, {
-        method: 'DELETE',
-      })
-      this.loadCars()
-    },
+
     async postCar(dto) {
-      const addedCar = await postItem(dto, 'cars')
-      this.cars.push(addedCar)
+      const addedCar = await postItem(dto)
+
+      this.cars.push({
+        ...addedCar,
+        isEditing: false,
+      })
     },
+
+    async deleteCar(id) {
+      await deleteCar(id)
+      this.cars = this.cars.filter(car => car.id !== id)
+    },
+
     editCar(car) {
       car.isEditing = true
     },
+
     cancelEdit(car) {
       car.isEditing = false
-      car.tempBrand = car.brand
-      car.tempPrice = car.price
     },
+
     async saveCar(car) {
-      const resp = await fetch(`http://localhost:3000/api/v0/cars/${car.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ brand: car.tempBrand, price: car.tempPrice }),
+      const updated = await updateCar(car.id, {
+        brand: car.brand,
+        price: car.price,
       })
-      const updated = await resp.json()
+
       car.brand = updated.brand
       car.price = updated.price
       car.isEditing = false
@@ -70,11 +79,7 @@ export default {
     />
   </ul>
 </template>
-
 <style scoped>
-b {
-  padding: 15px;
-}
 h2 {
   margin-bottom: 1rem;
   font-family: Arial, sans-serif;
@@ -84,10 +89,6 @@ h2 {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1rem;
-}
-
-.add-car input {
-  padding: 0.3rem 0.5rem;
 }
 
 .add-car button {
