@@ -1,8 +1,9 @@
 <script>
-import InputForm from './InputForm.vue'
-import { postItem } from '@/API'
+import InputForm from '../components/InputForm.vue'
+import { postItem } from '@/carsApi'
+import CarsList from './CarsList.vue'
 export default {
-  components: { InputForm },
+  components: { InputForm, CarsList },
   data() {
     return {
       text: '',
@@ -60,25 +61,13 @@ export default {
   </div>
 
   <ul>
-    <li v-for="car in cars" :key="car.id">
-      <div class="car-left">
-        <div v-if="!car.isEditing">
-          <b>{{ car.brand }}</b>
-          <b>{{ car.price }}</b>
-        </div>
-        <div v-else class="car-edit">
-          <input v-model="car.tempBrand" placeholder="Brand" />
-          <input v-model="car.tempPrice" type="number" placeholder="Price" />
-        </div>
-      </div>
-
-      <div class="car-right actions">
-        <button v-if="!car.isEditing" @click="editCar(car)">Edit</button>
-        <button v-if="!car.isEditing" @click="deleteCar(car.id)">Delete</button>
-        <button v-if="car.isEditing" @click="saveCar(car)">Save</button>
-        <button v-if="car.isEditing" @click="cancelEdit(car)">Cancel</button>
-      </div>
-    </li>
+    <CarsList
+      :cars="cars"
+      @delete="deleteCar"
+      @edit="editCar"
+      @save="saveCar"
+      @cancel="cancelEdit"
+    />
   </ul>
 </template>
 
@@ -103,36 +92,5 @@ h2 {
 
 .add-car button {
   padding: 0.3rem 0.8rem;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.car-left {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.car-edit input {
-  margin-right: 0.5rem;
-  padding: 0.2rem 0.4rem;
-}
-
-.car-right button {
-  margin-left: 0.3rem;
-  padding: 0.2rem 0.5rem;
 }
 </style>
