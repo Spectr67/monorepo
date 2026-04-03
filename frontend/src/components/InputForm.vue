@@ -1,7 +1,5 @@
 <script>
 export default {
-  emits: ['post'],
-
   data() {
     return {
       brand: '',

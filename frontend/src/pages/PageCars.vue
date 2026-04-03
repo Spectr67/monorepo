@@ -1,58 +1,59 @@
 <script>
-import InputForm from './InputForm.vue'
+import InputForm from '../components/InputForm.vue'
+import CarsList from './CarsList.vue'
+import { postItem, loadCars, deleteCar, updateCar } from '../carsApi'
 
 export default {
-  components: { InputForm },
+  components: { InputForm, CarsList },
+
   data() {
     return {
-      text: '',
       cars: [],
-      newCar: { brand: '', price: '' },
     }
   },
 
-  created() {
-    this.loadCars()
+  async created() {
+    await this.loadCars()
   },
 
   methods: {
     async loadCars() {
-      const resp = await fetch('http://localhost:3000/api/v0/cars')
-      this.cars = await resp.json()
-    },
-    async deleteCar(id) {
-      const resp = await fetch(`http://localhost:3000/api/v0/cars/${id}`, {
-        method: 'DELETE',
-      })
-      this.loadCars()
-    },
-    async postCar() {
-      const resp = await fetch('http://localhost:3000/api/v0/cars', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...this.newCar }),
-      })
-      const addedCar = await resp.json()
-      this.cars.push(addedCar)
+      const data = await loadCars()
 
-      this.newCar.brand = ''
-      this.newCar.price = ''
+      this.cars = data.map(car => ({
+        ...car,
+        isEditing: false,
+      }))
     },
+
+    async postCar(dto) {
+      const addedCar = await postItem(dto)
+
+      this.cars.push({
+        ...addedCar,
+        isEditing: false,
+      })
+    },
+
+    async deleteCar(id) {
+      await deleteCar(id)
+      this.cars = this.cars.filter(car => car.id !== id)
+    },
+
     editCar(car) {
       car.isEditing = true
     },
+
     cancelEdit(car) {
       car.isEditing = false
-      car.tempBrand = car.brand
-      car.tempPrice = car.price
     },
+
     async saveCar(car) {
-      const resp = await fetch(`http://localhost:3000/api/v0/cars/${car.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ brand: car.tempBrand, price: car.tempPrice }),
+      const updated = await updateCar(car.id, {
+        brand: car.brand,
+        price: car.price,
       })
-      const updated = await resp.json()
+
       car.brand = updated.brand
       car.price = updated.price
       car.isEditing = false
@@ -69,28 +70,15 @@ export default {
   </div>
 
   <ul>
-    <li v-for="car in cars" :key="car.id">
-      <div class="car-left">
-        <div v-if="!car.isEditing">
-          <b>{{ car.brand }}</b>
-          <i>{{ car.price }}</i>
-        </div>
-        <div v-else class="car-edit">
-          <input v-model="car.tempBrand" placeholder="Brand" />
-          <input v-model="car.tempPrice" type="number" placeholder="Price" />
-        </div>
-      </div>
-
-      <div class="car-right actions">
-        <button v-if="!car.isEditing" @click="editCar(car)">Edit</button>
-        <button v-if="!car.isEditing" @click="deleteCar(car.id)">Delete</button>
-        <button v-if="car.isEditing" @click="saveCar(car)">Save</button>
-        <button v-if="car.isEditing" @click="cancelEdit(car)">Cancel</button>
-      </div>
-    </li>
+    <CarsList
+      :cars="cars"
+      @delete="deleteCar"
+      @edit="editCar"
+      @save="saveCar"
+      @cancel="cancelEdit"
+    />
   </ul>
 </template>
-
 <style scoped>
 h2 {
   margin-bottom: 1rem;
@@ -103,42 +91,7 @@ h2 {
   margin-bottom: 1rem;
 }
 
-.add-car input {
-  padding: 0.3rem 0.5rem;
-}
-
 .add-car button {
   padding: 0.3rem 0.8rem;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.car-left {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.car-edit input {
-  margin-right: 0.5rem;
-  padding: 0.2rem 0.4rem;
-}
-
-.car-right button {
-  margin-left: 0.3rem;
-  padding: 0.2rem 0.5rem;
 }
 </style>
