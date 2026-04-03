@@ -1,33 +1,49 @@
-Полный исправленный CarItem.vue
 <script>
 export default {
   props: ['car'],
-  emits: ['delete', 'edit', 'save', 'cancel'],
+
+  emits: ['delete', 'save'],
+
+  data() {
+    return {
+      isEditing: false,
+      localCar: this.initCar(),
+    }
+  },
+
+  methods: {
+    initCar() {
+      return { ...this.car }
+    },
+  },
 }
 </script>
 
 <template>
   <li>
     <div class="car-left">
-      <div v-if="!car.isEditing">
+      <div v-if="!isEditing">
         <b>{{ car.brand }}</b>
         <b>{{ car.price }}</b>
       </div>
 
       <div v-else class="car-edit">
-        <input v-model="car.brand" placeholder="Brand" />
-        <input v-model="car.price" type="number" placeholder="Price" />
+        <input v-model="localCar.brand" placeholder="Brand" />
+        <input v-model="localCar.price" type="number" placeholder="Price" />
       </div>
     </div>
 
     <div class="car-right actions">
-      <button v-if="!car.isEditing" @click="$emit('edit', car)">Edit</button>
-      <button v-if="!car.isEditing" @click="$emit('delete', car.id)">
-        Delete
-      </button>
+      <button v-if="!isEditing" @click="isEditing = true">Edit</button>
+      <button v-if="!isEditing" @click="$emit('delete', car.id)">Delete</button>
 
-      <button v-if="car.isEditing" @click="$emit('save', car)">Save</button>
-      <button v-if="car.isEditing" @click="$emit('cancel', car)">Cancel</button>
+      <button v-if="isEditing" @click="$emit('save', { ...car })">Save</button>
+      <button
+        v-if="isEditing"
+        @click="((isEditing = false), (localCar = this.initCar()))"
+      >
+        Cancel
+      </button>
     </div>
   </li>
 </template>
