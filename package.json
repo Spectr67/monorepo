@@ -9,7 +9,7 @@
     "dev:fe": "npm run dev --workspace=@monorepo/frontend",
     "dev:be": "npm run dev --workspace=@monorepo/backend",
     "build": "run-s build:fe build:be",
-    "dev": "run-p dev:be dev:fe",
+    "dev": "run-p dev:fe dev:be",
     "start": "node ./build/server/main.js"
   },
   "keywords": [],

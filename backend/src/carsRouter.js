@@ -1,5 +1,11 @@
 import { Router } from 'express'
-import { addCar, deleteCarById, getCarsAll, getCarsById } from './carsModel.js'
+import {
+  addCar,
+  deleteCarById,
+  getCarsAll,
+  getCarsById,
+  updateCarById,
+} from './carsModel.js'
 // import cars from './carsStorage.js'
 
 const carsRouter = Router()
@@ -32,11 +38,10 @@ carsRouter.post('/cars', (req, res) => {
 })
 
 carsRouter.patch('/cars/:id', (req, res) => {
-  const car = cars.find(car => car.id === +req.params.id)
+  const car = updateCarById(+req.params.id, req.body)
   if (!car) {
     res.status(404).send('opps')
   } else {
-    Object.assign(car, req.body)
     res.status(200).send(car)
   }
 })
