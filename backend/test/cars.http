@@ -18,5 +18,3 @@ Content-Type: application/json; charset=utf-8
 
 {"brand": "Lamborghini", "price": 111111}
 ###
-
-GET https://api.bybit.com/v5/market/kline?category=spot&interval=D&symbol=BTCUSDT&limit=5
