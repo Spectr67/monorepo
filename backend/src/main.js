@@ -1,7 +1,7 @@
 import express from 'express'
 import path from 'node:path'
 import cors from 'cors'
-import carsRouter from './carsRouter.js'
+import carsRouter from './cars/carsRouter.js'
 
 const app = express()
 const PORT = 3000
