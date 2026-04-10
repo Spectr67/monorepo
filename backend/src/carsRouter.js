@@ -9,10 +9,10 @@ import {
 
 const carsRouter = Router()
 
-carsRouter.get('/cars', handleGetAll)
-carsRouter.get('/cars/:id', handleGetById)
-carsRouter.post('/cars', handleAdd)
-carsRouter.patch('/cars/:id', handleUpdate)
-carsRouter.delete('/cars/:id', handleDelete)
+carsRouter.get('/', handleGetAll)
+carsRouter.get('/:id', handleGetById)
+carsRouter.post('/', handleAdd)
+carsRouter.patch('/:id', handleUpdate)
+carsRouter.delete('/:id', handleDelete)
 
 export default carsRouter
