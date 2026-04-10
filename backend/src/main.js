@@ -2,6 +2,7 @@ import express from 'express'
 import path from 'node:path'
 import cors from 'cors'
 import carsRouter from './cars/carsRouter.js'
+import bikesRouter from './bikes/bikesRouter.js'
 
 const app = express()
 const PORT = 3000
@@ -17,7 +18,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/v0/cars', carsRouter)
-// app.use('/api/v0/bikes', bikesRouter)
+app.use('/api/v0/bikes', bikesRouter)
 
 app.use('/', express.static(staticFolder))
 app.get('/api/v0/{*any}', (req, res) => res.status(404).send('not found...'))
