@@ -1,25 +1,17 @@
-const BASE_URL = 'https://api.mexc.com/api/v3/'
+const BASE_URL = 'http://localhost:3000/api/v0/mexc'
 
-export async function getKlinesMexc(tokenName, limit = 35) {
-  const url = `${BASE_URL}klines?symbol=${tokenName.toUpperCase()}USDT&interval=1d&limit=${limit}`
-  const res = await fetch(url)
-  const data = await res.json()
+export async function fetchMexcListings(tokens = []) {
+  try {
+    const url =
+      tokens.length > 0 ? `${BASE_URL}?tokens=${tokens.join(',')}` : BASE_URL
 
-  if (!Array.isArray(data)) {
-    console.error('MEXC error:', data)
+    const res = await fetch(url)
+
+    if (!res.ok) throw new Error('Network response was not ok')
+
+    return await res.json()
+  } catch (error) {
+    console.error('Failed to fetch MEXC data:', error)
     return []
   }
-
-  return data.map(candle => ({
-    openTime: candle[0],
-    open: Number(candle[1]),
-    high: Number(candle[2]),
-    low: Number(candle[3]),
-    close: Number(candle[4]),
-    volume: Number(candle[5]),
-    closeTime: candle[6],
-    quoteVolume: Number(candle[7]),
-  }))
 }
-let x = await getKlinesMexc('BTC', 35)
-console.log(x)
