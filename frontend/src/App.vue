@@ -12,6 +12,12 @@ export default {}
       <li>
         <RouterLink to="/cars">cars</RouterLink>
       </li>
+      <li>
+        <RouterLink to="/Bybit">Bybit</RouterLink>
+      </li>
+      <li>
+        <RouterLink to="/Mexc">Mexc</RouterLink>
+      </li>
     </ul>
     <RouterView />
   </div>

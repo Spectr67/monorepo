@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import PageMain from '@/pages/PageMain.vue'
-import PageCars from '@/pages/PageCars.vue'
-
+import PageMain from '../pages/PageMain.vue'
+import PageCars from '../pages/Cars/PageCars.vue'
+import Bybitpage from '../pages/Bybit/Bybitpage.vue'
+import MexcPage from '@/pages/Mexc/MexcPage.vue'
 const routes = [
   {
     path: '/',
@@ -10,6 +11,14 @@ const routes = [
   {
     path: '/cars',
     component: PageCars,
+  },
+  {
+    path: '/bybit',
+    component: Bybitpage,
+  },
+  {
+    path: '/mexc',
+    component: MexcPage,
   },
 ]
 

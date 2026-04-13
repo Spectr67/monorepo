@@ -1,5 +1,5 @@
 <script>
-import { deleteCar, updateCar } from '../carsApi'
+import { deleteCar, updateCar } from '../../api/carsApi'
 
 export default {
   props: ['car', 'cars'],
