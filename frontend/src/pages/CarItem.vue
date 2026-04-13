@@ -1,8 +1,9 @@
 <script>
-export default {
-  props: ['car'],
+import { deleteCar, updateCar } from '../carsApi'
 
-  emits: ['delete', 'save'],
+export default {
+  props: ['car', 'cars'],
+  emits: ['update:cars'],
 
   data() {
     return {
@@ -15,39 +16,72 @@ export default {
     initCar() {
       return { ...this.car }
     },
+
+    async handleDelete() {
+      await deleteCar(this.car.id)
+
+      const updated = this.cars.filter(c => c.id !== this.car.id)
+      this.$emit('update:cars', updated)
+    },
+
+    async handleSave() {
+      const updatedCar = await updateCar(this.car.id, {
+        brand: this.localCar.brand,
+        price: this.localCar.price,
+      })
+
+      const updated = this.cars.map(c =>
+        c.id === updatedCar.id ? updatedCar : c,
+      )
+
+      this.$emit('update:cars', updated)
+      this.isEditing = false
+    },
+
+    cancelEdit() {
+      this.isEditing = false
+      this.localCar = this.initCar()
+    },
+  },
+
+  watch: {
+    car: {
+      handler() {
+        this.localCar = this.initCar()
+      },
+      deep: true,
+    },
   },
 }
 </script>
 
 <template>
   <li>
-    <div class="car-left">
+    <div>
       <div v-if="!isEditing">
         <b>{{ car.brand }}</b>
         <b>{{ car.price }}</b>
       </div>
 
-      <div v-else class="car-edit">
+      <div v-else>
         <input v-model="localCar.brand" placeholder="Brand" />
-        <input v-model="localCar.price" type="number" placeholder="Price" />
+        <input
+          v-model.number="localCar.price"
+          type="number"
+          placeholder="Price"
+        />
       </div>
     </div>
 
-    <div class="car-right actions">
+    <div>
       <button v-if="!isEditing" @click="isEditing = true">Edit</button>
-      <button v-if="!isEditing" @click="$emit('delete', car.id)">Delete</button>
+      <button v-if="!isEditing" @click="handleDelete">Delete</button>
 
-      <button v-if="isEditing" @click="$emit('save', { ...car })">Save</button>
-      <button
-        v-if="isEditing"
-        @click="((isEditing = false), (localCar = this.initCar()))"
-      >
-        Cancel
-      </button>
+      <button v-if="isEditing" @click="handleSave">Save</button>
+      <button v-if="isEditing" @click="cancelEdit">Cancel</button>
     </div>
   </li>
 </template>
-
 <style scoped>
 .car-left {
   display: flex;

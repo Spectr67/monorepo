@@ -4,24 +4,35 @@ import CarItem from './CarItem.vue'
 export default {
   components: { CarItem },
 
-  props: ['cars'],
-
-  emits: ['update:model-value'],
+  props: ['modelValue'],
+  emits: ['update:modelValue'],
 }
 </script>
 
 <template>
   <ul>
     <CarItem
-      v-for="car in cars"
+      v-for="car in modelValue"
       :key="car.id"
       :car="car"
-      @delete="$emit('delete', $event)"
-      @save="$emit('save', $event)"
+      :cars="modelValue"
+      @update:cars="$emit('update:modelValue', $event)"
     />
   </ul>
 </template>
 
+<style scoped>
+ul {
+  list-style: none;
+  padding: 0;
+}
+</style>
+<style scoped>
+ul {
+  list-style: none;
+  padding: 0;
+}
+</style>
 <style scoped>
 ul {
   list-style: none;
