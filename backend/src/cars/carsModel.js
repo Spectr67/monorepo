@@ -4,6 +4,11 @@ function createCar(dto) {
   return { ...dto, id: (Math.random() * 10000) >>> 0 }
 }
 
+export function setCars(cars) {
+  carsStorage.length = 0
+  carsStorage.push(...cars)
+}
+
 export function getCarsAll() {
   return [...carsStorage.map(cs => ({ ...cs }))]
 }

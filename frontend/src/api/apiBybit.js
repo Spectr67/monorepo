@@ -24,8 +24,8 @@ export async function getKlinesBybit(tokenName, limit = 35, start = 0) {
       low: Number(candle[3]),
       close: Number(candle[4]),
       volume: Number(candle[5]),
-      quoteVolume: Number(candle[6]),
       closeTime: openTime + 24 * 60 * 60 * 1000,
+      quoteVolume: Number(candle[6]),
     }
   })
 }
