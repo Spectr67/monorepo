@@ -10,7 +10,7 @@ export const getMexcListings = async (req, res) => {
 
     const results = await mexcModel.getListingData({
       list: tokens,
-      exchange: 'MEXC',
+      stockName: 'MEXC',
       getKlines: mexcModel.getKlinesMexc,
     })
     console.log(results)

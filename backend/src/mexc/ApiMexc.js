@@ -33,3 +33,5 @@ export async function getKlinesMexc(tokenName, limit = 35) {
     return []
   }
 }
+
+// getKlinesMexc('BTC').then(console.log)
