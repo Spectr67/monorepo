@@ -13,7 +13,7 @@ export const getMexcListings = async (req, res) => {
       exchange: 'MEXC',
       getKlines: mexcModel.getKlinesMexc,
     })
-
+    console.log(results)
     res.writeHead(200, {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
