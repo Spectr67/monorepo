@@ -1,6 +1,15 @@
-import { getKlinesMexc, percent, sleep } from '../mexc/ApiMexc.js'
+import { getKlines } from '../klines/klinesApi.js'
 import coinsStorage from '../coins/coinsStorage.js'
 import defaultTokens from '../mexc/mexcStorage.js'
+import { percent } from '../utils.js'
+
+export function addCoin(coin) {
+  coinsStorage.push(coin)
+}
+
+export function getCoins() {
+  return [...coinsStorage]
+}
 
 export function calculateCoin({ tokenName, stockName, klines }) {
   if (!klines || klines.length === 0) return null
@@ -28,30 +37,30 @@ export function calculateCoin({ tokenName, stockName, klines }) {
   }
 }
 
-export async function refreshCoinsData() {
-  const results = []
+// export async function refreshCoinsData() {
+//   const results = []
 
-  for (const token of defaultTokens) {
-    const klines = await getKlinesMexc(token)
-    const analyzedCoin = calculateCoin({
-      tokenName: token,
-      stockName: 'MEXC',
-      klines,
-    })
+//   for (const token of defaultTokens) {
+//     const klines = await getKlines(token)
+//     const analyzedCoin = calculateCoin({
+//       tokenName: token,
+//       stockName: 'MEXC',
+//       klines,
+//     })
 
-    if (analyzedCoin) results.push(analyzedCoin)
-    await sleep(200)
-  }
+//     if (analyzedCoin) results.push(analyzedCoin)
+//     await sleep(200)
+//   }
 
-  coinsStorage.length = 0
-  coinsStorage.push(...results)
+//   coinsStorage.length = 0
+//   coinsStorage.push(...results)
 
-  return coinsStorage
-}
+//   return coinsStorage
+// }
 
-export function getCoinsAll() {
-  return [...coinsStorage]
-}
+// export function getCoinsAll() {
+//   return [...coinsStorage]
+// }
 // tokensNamesStorage.mexc.forEach(async tokenName => {
 //   const klines = await getKlinesMexc()
 //   const coin = calculateCoin({ tokenName, stockName: 'MEXC', klines })
