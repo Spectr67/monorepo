@@ -9,7 +9,7 @@ export default {}
       <li>
         <RouterLink to="/">main</RouterLink>
       </li>
-      <!-- <li>
+      <li>
         <RouterLink to="/cars">cars</RouterLink>
       </li>
       <li>
@@ -17,7 +17,7 @@ export default {}
       </li>
       <li>
         <RouterLink to="/mexc">Mexc</RouterLink>
-      </li> -->
+      </li>
       <li>
         <RouterLink to="/chart">chart</RouterLink>
       </li>

@@ -1,6 +1,6 @@
-import { getKlinesMexc } from '../mexc/ApiMexc'
-import tokensNamesStorage from '../tokensNames/tokensNamesStorage'
-import coinsStorage from './coinsStorage'
+import { getKlinesMexc, percent, sleep } from '../mexc/ApiMexc.js'
+import coinsStorage from '../coins/coinsStorage.js'
+import defaultTokens from '../mexc/mexcStorage.js'
 
 export function calculateCoin({ tokenName, stockName, klines }) {
   if (!klines || klines.length === 0) return null
@@ -28,6 +28,36 @@ export function calculateCoin({ tokenName, stockName, klines }) {
   }
 }
 
+export async function refreshCoinsData() {
+  const results = []
+
+  for (const token of defaultTokens) {
+    const klines = await getKlinesMexc(token)
+    const analyzedCoin = calculateCoin({
+      tokenName: token,
+      stockName: 'MEXC',
+      klines,
+    })
+
+    if (analyzedCoin) results.push(analyzedCoin)
+    await sleep(200)
+  }
+
+  coinsStorage.length = 0
+  coinsStorage.push(...results)
+
+  return coinsStorage
+}
+
+export function getCoinsAll() {
+  return [...coinsStorage]
+}
+// tokensNamesStorage.mexc.forEach(async tokenName => {
+//   const klines = await getKlinesMexc()
+//   const coin = calculateCoin({ tokenName, stockName: 'MEXC', klines })
+//   coinsStorage.push(coin)
+// })
+
 // export async function calculateCoins({ tokensNames, stockName, getKlines }) {
 //   const results = []
 
@@ -46,9 +76,3 @@ export function calculateCoin({ tokenName, stockName, klines }) {
 
 //   return results
 // }
-
-tokensNamesStorage.mexc.forEach(async tokenName => {
-  const klines = await getKlinesMexc()
-  const coin = calculateCoin({ tokenName, stockName: 'MEXC', klines })
-  coinsStorage.push(coin)
-})

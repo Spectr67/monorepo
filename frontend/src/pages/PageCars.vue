@@ -1,7 +1,7 @@
 <script>
 import InputForm from '@/components/InputForm.vue'
-import { postItem, loadCars } from '../../api/carsApi'
-import CarsList from './CarsList.vue'
+import { postItem, loadCars } from '../api/carsApi.js'
+import CarsList from '@/components/WidgetCars/CarsList.vue'
 
 export default {
   components: { InputForm, CarsList },
