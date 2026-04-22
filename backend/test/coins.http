@@ -1,0 +1,20 @@
+GET http://localhost:3000/api/v0/coins
+###
+
+GET http://localhost:3000/api/v0/coins/BTC
+###
+
+DELETE http://localhost:3000/api/v0/coins/BTC
+###
+
+POST http://localhost:3000/api/v0/coins
+Content-Type: application/json; charset=utf-8
+
+{"brand": "Ferrari", "price": 250000}
+###
+
+PATCH http://localhost:3000/api/v0/coins/BTC
+Content-Type: application/json; charset=utf-8
+
+{"brand": "Lamborghini", "price": 111111}
+###

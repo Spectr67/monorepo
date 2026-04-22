@@ -3,7 +3,8 @@ import path from 'node:path'
 import cors from 'cors'
 import carsRouter from './cars/carsRouter.js'
 import bikesRouter from './bikes/bikesRouter.js'
-import { handleGetMexcListings } from './mexc/mexcController.js'
+import klinesRouter from './klines/klinesRouter.js'
+import coinsRouter from './coins/coinsRouter.js'
 
 const app = express()
 const PORT = 3000
@@ -20,8 +21,8 @@ app.use(express.json())
 
 app.use('/api/v0/cars', carsRouter)
 app.use('/api/v0/bikes', bikesRouter)
-
-app.get('/api/v0/mexc', handleGetMexcListings)
+app.use('/api/v0/klines', klinesRouter)
+app.use('/api/v0/coins', coinsRouter)
 
 app.use('/', express.static(staticFolder))
 

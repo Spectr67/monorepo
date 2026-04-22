@@ -1,19 +1,21 @@
 import {
-  handleGetKninesByTokenName,
+  handleGetKlinesByTokenName,
   handleUpdateKlinesByTokenName,
 } from '../klines/klinesController.js'
+import tokensNamesStorage from '../tokensNames/tokensNamesStorage.js'
 import { sleep } from '../utils.js'
 import { addCoin, calculateCoin, getCoins } from './coinsModel.js'
 
 async function handleAddCoinByTokenName(tokenName) {
-  await handleUpdateKlinesByTokenName('BTC')
-  const klines = handleGetKlinesByTokenName('BTC')
+  await handleUpdateKlinesByTokenName(tokenName)
+  const klines = handleGetKlinesByTokenName(tokenName)
   const coin = calculateCoin({ tokenName, stockName: 'mexc', klines })
   addCoin(coin)
 }
 
-function handleGetCoins() {
-  return getCoins()
+export function handleGetCoins(req, res) {
+  const cars = getCoins()
+  res.status(200).send(cars)
 }
 
 // function handleGetLastCoin() {
@@ -29,21 +31,24 @@ function cleanCoins() {
 //   await handleAddCoinByTokenName(tokenName)
 //   console.log(handleGetCoins())
 // })
-
+tokensNamesStorage
 let flag = false
 async function handleRun() {
   if (flag) return
   flag = true
-  for (const tokenName of tokenNames) {
+  for (const tokenName of tokensNamesStorage.mexc) {
     await handleAddCoinByTokenName(tokenName)
-    await sleep(500)
+    await sleep(2500)
   }
   flag = false
 }
 
-console.log(handleGetCoins())
-await handleAddCoinByTokenName('BTC')
-console.log(handleGetCoins())
-await sleep(200)
-await handleAddCoinByTokenName('ETH')
-console.log(handleGetCoins())
+handleRun()
+
+// console.log(handleGetCoins())
+// await handleAddCoinByTokenName('BTC')
+// await handleAddCoinByTokenName('ETH')
+// console.log(handleGetCoins())
+// await sleep(200)
+// await handleAddCoinByTokenName('ETH')
+// console.log(handleGetCoins())

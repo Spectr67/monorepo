@@ -7,3 +7,7 @@ export function setKlinesByTokenName(tokenName, klines) {
 export function getKlinesByTokenName(tokenName) {
   return klinesStorage[tokenName] ?? []
 }
+
+export function getKlinesAll() {
+  return { ...klinesStorage }
+}

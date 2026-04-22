@@ -1,6 +1,5 @@
 import { getKlines } from '../klines/klinesApi.js'
 import coinsStorage from '../coins/coinsStorage.js'
-import defaultTokens from '../mexc/mexcStorage.js'
 import { percent } from '../utils.js'
 
 export function addCoin(coin) {

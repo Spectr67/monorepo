@@ -2,6 +2,7 @@ const BASE_URL = 'https://api.mexc.com/api/v3/'
 
 // getKlinesByTokenName
 export async function getKlines(tokenName, limit = 35) {
+  console.log('>>> getKlines', tokenName)
   const url = `${BASE_URL}klines?symbol=${tokenName.toUpperCase()}USDT&interval=1d&limit=${limit}`
   try {
     const res = await fetch(url)
