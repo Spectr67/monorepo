@@ -1,8 +1,9 @@
-import { refreshCoinsData, getCoinsAll } from '../coins/coinsModel.js'
+import { getCoins } from '../coins/coinsModel.js'
 
 export async function handleGetMexcListings(req, res) {
   try {
     const coins = await refreshCoinsData()
+    // const coins = getCoins()
 
     res.writeHead(200, {
       'Content-Type': 'application/json',

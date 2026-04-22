@@ -7,7 +7,7 @@ import { addCoin, calculateCoin, getCoins } from './coinsModel.js'
 
 async function handleAddCoinByTokenName(tokenName) {
   await handleUpdateKlinesByTokenName('BTC')
-  const klines = handleGetKninesByTokenName('BTC')
+  const klines = handleGetKlinesByTokenName('BTC')
   const coin = calculateCoin({ tokenName, stockName: 'mexc', klines })
   addCoin(coin)
 }

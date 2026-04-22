@@ -3,7 +3,7 @@ import path from 'node:path'
 import cors from 'cors'
 import carsRouter from './cars/carsRouter.js'
 import bikesRouter from './bikes/bikesRouter.js'
-import { getMexcListings } from './mexc/mexcController.js' // Это уже на месте
+import { handleGetMexcListings } from './mexc/mexcController.js'
 
 const app = express()
 const PORT = 3000
@@ -21,7 +21,7 @@ app.use(express.json())
 app.use('/api/v0/cars', carsRouter)
 app.use('/api/v0/bikes', bikesRouter)
 
-app.get('/api/v0/mexc', getMexcListings)
+app.get('/api/v0/mexc', handleGetMexcListings)
 
 app.use('/', express.static(staticFolder))
 
