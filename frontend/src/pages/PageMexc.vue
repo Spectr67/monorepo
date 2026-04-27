@@ -17,6 +17,7 @@ export default {
       this.loading = true
       try {
         this.coins = await fetchMexcListings(this.tokenList)
+        console.log(this.coins)
       } catch (err) {
         console.error('Fetch error:', err)
       } finally {
