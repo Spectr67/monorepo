@@ -21,6 +21,9 @@ export default {}
       <li>
         <RouterLink to="/chart">chart</RouterLink>
       </li>
+      <li>
+        <RouterLink to="/coins">coins</RouterLink>
+      </li>
     </ul>
     <RouterView />
   </div>

@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3000/api/v0/mexc'
+const BASE_URL = 'http://localhost:3000/api/v0/coins'
 
 export async function fetchMexcListings(tokens = []) {
   try {

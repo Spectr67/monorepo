@@ -23,7 +23,6 @@ app.use('/api/v0/cars', carsRouter)
 app.use('/api/v0/bikes', bikesRouter)
 app.use('/api/v0/klines', klinesRouter)
 app.use('/api/v0/coins', coinsRouter)
-app.use('/api/v0/mexc', coinsRouter)
 
 app.use('/', express.static(staticFolder))
 
