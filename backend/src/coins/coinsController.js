@@ -10,7 +10,11 @@ async function handleAddCoinByTokenName(tokenName) {
   await handleUpdateKlinesByTokenName(tokenName)
   const klines = handleGetKlinesByTokenName(tokenName)
   const coin = calculateCoin({ tokenName, stockName: 'mexc', klines })
-  addCoin(coin)
+  if (coin) {
+    addCoin(coin)
+  } else {
+    console.log(` ${tokenName},null.`)
+  }
 }
 
 export function handleGetCoins(req, res) {

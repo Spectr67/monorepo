@@ -11,3 +11,5 @@ Everything
 Twise
 
 бекенд api/v0/coins не должен содержать null в массивах
+
+убрать лишнее

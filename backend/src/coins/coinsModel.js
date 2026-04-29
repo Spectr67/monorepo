@@ -11,7 +11,12 @@ export function getCoins() {
 }
 
 export function calculateCoin({ tokenName, stockName, klines }) {
-  if (!klines || klines.length === 0) return null
+  if (!klines || klines.length === 0) {
+    console.warn(
+      `[${stockName}] Токена ${tokenName} нет в листинге или данные отсутствуют.`,
+    )
+    return null
+  }
 
   const firstDay = klines[0]
   const day3 = klines[3] ?? null
@@ -20,6 +25,7 @@ export function calculateCoin({ tokenName, stockName, klines }) {
 
   const listingPrice = firstDay.close
   const currentPrice = lastDay.close
+  console.log(tokenName)
 
   return {
     stockName,
