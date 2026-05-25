@@ -6,18 +6,30 @@ export default {
     return {
       coins: [],
       loading: false,
+      interval: null,
     }
   },
+
   mounted() {
     this.loadCoins()
+
+    this.interval = setInterval(() => {
+      this.loadCoins()
+    }, 3000)
   },
+
+  beforeUnmount() {
+    clearInterval(this.interval)
+  },
+
   methods: {
     async loadCoins() {
+      if (this.loading) return
+
       this.loading = true
       try {
         this.coins = await getCoins()
         this.coins = this.coins.filter(x => x)
-        // this.coins.push(null)
       } catch (err) {
         console.error('Fetch error:', err)
         this.coins = []
@@ -25,17 +37,21 @@ export default {
         this.loading = false
       }
     },
+
     formatPrice(val) {
       if (!val) return '0.00'
       return val < 0.01 ? val.toFixed(8) : val.toFixed(4)
     },
+
     formatPercent(val) {
       if (val === null || val === undefined) return '—'
       return (val > 0 ? '+' : '') + val + '%'
     },
+
     formatDate(ts) {
       return new Date(ts).toLocaleDateString('ru-RU')
     },
+
     getTrendClass(val) {
       if (!val) return 'neutral'
       return val > 0 ? 'up' : 'down'
@@ -47,7 +63,7 @@ export default {
   <div class="mexc-dashboard">
     <header class="dashboard-header">
       <div class="header-main">
-        <h1 class="title">MEXC Analytics</h1>
+        <h1 class="title">Coin List</h1>
         <div class="status">
           <span class="status-dot"></span>
           <span class="status-text">Live Market</span>
@@ -74,7 +90,7 @@ export default {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(coin, index) of coins" :key="index">
+          <tr v-for="(coin, index) of coins" :key="coin.tokenName">
             <td class="col-index">{{ index + 1 }}</td>
             <td class="col-asset">
               <span class="symbol">{{ coin.tokenName }}</span>

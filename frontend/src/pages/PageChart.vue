@@ -8,16 +8,7 @@ export default {
     }
   },
 
-  created() {
-    console.log(this.x)
-    console.log(document.querySelector('#elDiv'))
-  },
-
   mounted() {
-    console.log(this.x)
-    console.log(document.querySelector('#elDiv'))
-    console.log(window.elDiv)
-    console.log(document.querySelector('#elDiv') === window.elDiv)
     const chart = createChart(window.elDiv, { width: 800, height: 300 })
     const lineSeries = chart.addSeries(AreaSeries, {
       lineColor: '#2962FF',

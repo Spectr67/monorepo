@@ -10,6 +10,6 @@ Write
 Everything
 Twise
 
-бекенд api/v0/coins не должен содержать null в массивах
+бекенд api/v0/coins не должен содержать null в массивах gotovo
 
-убрать лишнее
+убрать лишнее gotovo
