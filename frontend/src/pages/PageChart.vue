@@ -1,34 +1,56 @@
 <script>
 import { AreaSeries, createChart, LineSeries } from 'lightweight-charts'
 
+const rand = () => Math.trunc(Math.random() * 100)
+
+// new Date().toLocaleDateString().split('.').toReversed().join('-')
+
+function makeLine() {
+  return { time: Date.now(), value: rand() }
+}
+
 export default {
   data() {
     return {
-      x: 42,
+      lineSeries: null,
+      lineData: [
+        { time: 1642598122, value: 80 },
+        { time: 1642598132, value: 90 },
+        { time: 1642598142, value: 70 },
+      ],
     }
+  },
+
+  computed: {
+    lineDataLength() {
+      return this.lineData.length + 4
+    },
   },
 
   mounted() {
     const chart = createChart(window.elDiv, { width: 800, height: 300 })
-    const lineSeries = chart.addSeries(AreaSeries, {
+    this.lineSeries = chart.addSeries(AreaSeries, {
       lineColor: '#2962FF',
       topColor: '#2962FF',
       bottomColor: 'rgba(41, 98, 255, 0.28)',
     })
-    lineSeries.setData([
-      { time: '2019-04-10', value: 80.01 },
-      { time: '2019-04-11', value: 80.01 },
-      { time: '2019-04-12', value: 96.63 },
-      { time: '2019-04-13', value: 76.64 },
-      { time: '2019-04-14', value: 81.89 },
-      { time: '2019-04-15', value: 74.43 },
-      { time: '2019-04-16', value: 80.01 },
-      { time: '2019-04-17', value: 96.63 },
-      { time: '2019-04-18', value: 76.64 },
-      { time: '2019-04-19', value: 81.89 },
-      { time: '2019-04-20', value: 74.43 },
-      { time: '2019-04-21', value: 74.43 },
-    ])
+    this.lineSeries.setData(this.lineData)
+  },
+
+  methods: {
+    handleAddLine() {
+      this.lineData.push(makeLine())
+    },
+  },
+
+  watch: {
+    lineData: {
+      deep: true,
+      handler(newVal, oldVal) {
+        console.log('??', newVal === oldVal)
+        this.lineSeries.setData(newVal)
+      },
+    },
   },
 }
 </script>
@@ -36,5 +58,10 @@ export default {
 <template>
   <h1>Chart</h1>
   <div id="elDiv"></div>
+  <button @click="handleAddLine">Add Line</button>
+  <button @click="lineData = 4">Set number</button>
+  <p>{{ lineData }}</p>
   <h2>end chart</h2>
+  <h3>{{ lineDataLength }}</h3>
+  <h4>{{ lineData.length }}</h4>
 </template>
