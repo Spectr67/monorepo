@@ -1,0 +1,16 @@
+const apiUrl = 'https://api.binance.com/api/v3/ticker/'
+
+function round(price) {
+  price = parseFloat(price)
+  return price < 1 ? price.toPrecision(2) : price.toFixed(2)
+}
+
+export async function getTickerBySymbol(symbol) {
+  const resp = await fetch(`${apiUrl}price?symbol=${symbol}`)
+  const json = await resp.json()
+  return round(json.price)
+}
+
+// let price = await getTickerBySymbol('BTCUSDT')
+
+// console.log(price)

@@ -1,10 +1,10 @@
 <script>
-import { createChart, AreaSeries } from 'lightweight-charts'
+import { getTickerBySymbol } from '@/api/tickerUpdater.js'
+import { addSeriesToChart, createCustomChart } from '@/createChart.js'
 
 export default {
   data() {
     return {
-      chart: null,
       lineSeries: null,
       interval: null,
       currentPrice: null,
@@ -13,30 +13,10 @@ export default {
       priceDirection: '',
     }
   },
-  async mounted() {
-    this.chart = createChart(this.$refs.chartContainer, {
-      width: 800,
-      height: 350,
-      layout: {
-        background: { color: '#131722' },
-        textColor: '#d1d4dc',
-      },
-      grid: {
-        vertLines: { color: 'rgba(42, 46, 57, 0.5)' },
-        horzLines: { color: 'rgba(42, 46, 57, 0.5)' },
-      },
-      timeScale: {
-        timeVisible: true,
-        secondsVisible: true,
-      },
-    })
 
-    this.lineSeries = this.chart.addSeries(AreaSeries, {
-      lineColor: '#2962FF',
-      topColor: 'rgba(41, 98, 255, 0.3)',
-      bottomColor: 'rgba(41, 98, 255, 0.0)',
-      lineWidth: 3,
-    })
+  async mounted() {
+    const chart = createCustomChart(this.$refs.chartContainer)
+    this.lineSeries = addSeriesToChart(chart)
 
     await this.pricePerTick()
 
@@ -46,18 +26,15 @@ export default {
   },
   methods: {
     async pricePerTick() {
-      const response = await fetch(
-        'https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT',
-      )
-      const data = await response.json()
-      const price = parseFloat(data.price)
+      const price = await getTickerBySymbol('BTCUSDT')
       const timestamp = Math.floor(Date.now() / 1000)
       if (this.currentPrice) {
         this.oldPrice = this.currentPrice
         if (price > this.oldPrice) {
           this.priceClass = 'price-up'
           this.priceDirection = '▲'
-        } else if (price < this.oldPrice) {
+        }
+        if (price < this.oldPrice) {
           this.priceClass = 'price-down'
           this.priceDirection = '▼'
         }
