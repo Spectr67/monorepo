@@ -11,6 +11,7 @@ export default {}
         <li><RouterLink to="/cars" class="nav-item">cars</RouterLink></li>
         <li><RouterLink to="/chart" class="nav-item">chart</RouterLink></li>
         <li><RouterLink to="/coins" class="nav-item">coins</RouterLink></li>
+        <li><RouterLink to="/bitcoin" class="nav-item">bitcoin</RouterLink></li>
       </ul>
     </nav>
 
