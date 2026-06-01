@@ -1,7 +1,7 @@
 import { createChart, AreaSeries } from 'lightweight-charts'
 
 export function createCustomChart(el) {
-  return createChart(this.$refs.chartContainer, {
+  return createChart(el, {
     width: 800,
     height: 350,
     layout: {

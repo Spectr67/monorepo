@@ -1,5 +1,5 @@
 <script>
-import { getTickerBySymbol } from '@/api/tickerUpdater.js'
+import { getTickerBySymbol, wrap } from '@/api/tickerUpdater.js'
 import { addSeriesToChart, createCustomChart } from '@/createChart.js'
 
 export default {
@@ -26,7 +26,11 @@ export default {
   },
   methods: {
     async pricePerTick() {
+      wrap(() => {
+        this.currentPrice = price
+      })
       const price = await getTickerBySymbol('BTCUSDT')
+      console.log('>', price)
       const timestamp = Math.floor(Date.now() / 1000)
       if (this.currentPrice) {
         this.oldPrice = this.currentPrice

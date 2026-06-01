@@ -11,6 +11,20 @@ export async function getTickerBySymbol(symbol) {
   return round(json.price)
 }
 
-// let price = await getTickerBySymbol('BTCUSDT')
+export function wrap(cb) {
+  setInterval(async () => {
+    const price = await getTickerBySymbol('BTCUSDT')
+    cb(price)
+    return
+  }, 2000)
+  return
+}
 
-// console.log(price)
+// wrap(console.log)
+
+wrap(x => {
+  console.log('yo!', x)
+  return
+})
+
+// wrap(console.log('yo!'))
