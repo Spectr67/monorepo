@@ -2,7 +2,8 @@ const apiUrl = 'https://api.binance.com/api/v3/ticker/'
 
 function round(price) {
   price = parseFloat(price)
-  return price < 1 ? price.toPrecision(2) : price.toFixed(2)
+  price = price < 1 ? price.toPrecision(2) : price.toFixed(2)
+  return +price
 }
 
 export async function getTickerBySymbol(symbol) {
@@ -20,11 +21,11 @@ export function wrap(cb) {
   return
 }
 
-// wrap(console.log)
+// wrap(x => {
+//   console.log('yo!', x)
+//   return
+// })
 
-wrap(x => {
-  console.log('yo!', x)
-  return
-})
+// wrap(console.log)
 
 // wrap(console.log('yo!'))

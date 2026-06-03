@@ -1,62 +1,53 @@
 <script>
-import { getTickerBySymbol, wrap } from '@/api/tickerUpdater.js'
+import { wrap } from '@/api/tickerUpdater.js'
 import { addSeriesToChart, createCustomChart } from '@/createChart.js'
 
 export default {
   data() {
     return {
       lineSeries: null,
-      interval: null,
       currentPrice: null,
-      oldPrice: null,
-      priceClass: '',
       priceDirection: '',
     }
   },
 
-  async mounted() {
+  mounted() {
     const chart = createCustomChart(this.$refs.chartContainer)
     this.lineSeries = addSeriesToChart(chart)
-
-    await this.pricePerTick()
-
-    this.interval = setInterval(() => {
-      this.pricePerTick()
-    }, 15000)
+    wrap(x => (this.currentPrice = x))
   },
-  methods: {
-    async pricePerTick() {
-      wrap(() => {
-        this.currentPrice = price
-      })
-      const price = await getTickerBySymbol('BTCUSDT')
-      console.log('>', price)
+
+  watch: {
+    currentPrice(newVal, oldVal) {
+      if (newVal > oldVal) this.priceDirection = '▲'
+      if (newVal < oldVal) this.priceDirection = '▼'
       const timestamp = Math.floor(Date.now() / 1000)
-      if (this.currentPrice) {
-        this.oldPrice = this.currentPrice
-        if (price > this.oldPrice) {
-          this.priceClass = 'price-up'
-          this.priceDirection = '▲'
-        }
-        if (price < this.oldPrice) {
-          this.priceClass = 'price-down'
-          this.priceDirection = '▼'
-        }
-      }
-      this.currentPrice = price
       this.lineSeries.update({
         time: timestamp,
-        value: price,
+        value: newVal,
       })
     },
   },
 }
 </script>
+
+<!-- 
+
+:class="{'price-up': priceDirection === '▲', 'price-down': priceDirection ===
+'▼'}
+
+:class="priceDirection === '▲' ? 'price-up' : 'price-down'" 
+
+-->
+
 <template>
   <div class="crypto-container">
     <div class="price-board">
       <h2>Bitcoin (BTC/USDT)</h2>
-      <div class="current-price" :class="priceClass">
+      <div
+        class="current-price"
+        :class="priceDirection === '▲' ? 'price-up' : 'price-down'"
+      >
         ${{ currentPrice }}
         <span class="direction-arrow">{{ priceDirection }}</span>
       </div>
