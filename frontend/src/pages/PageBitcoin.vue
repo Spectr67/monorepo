@@ -1,5 +1,5 @@
 <script>
-import { wrap } from '@/api/tickerUpdater.js'
+import { priceUpdater, priceUpdater2 } from '@/api/tickerUpdater.js'
 import { addSeriesToChart, createCustomChart } from '@/createChart.js'
 
 export default {
@@ -8,24 +8,48 @@ export default {
       lineSeries: null,
       currentPrice: null,
       priceDirection: '',
+      currentCandle: {
+        o: 0,
+        h: 0,
+        l: 0,
+        c: 0,
+        t: 0,
+      },
     }
   },
 
   mounted() {
     const chart = createCustomChart(this.$refs.chartContainer)
     this.lineSeries = addSeriesToChart(chart)
-    wrap(x => (this.currentPrice = x))
+    priceUpdater2(candle => (this.currentCandle = candle))
   },
 
   watch: {
-    currentPrice(newVal, oldVal) {
-      if (newVal > oldVal) this.priceDirection = '▲'
-      if (newVal < oldVal) this.priceDirection = '▼'
-      const timestamp = Math.floor(Date.now() / 1000)
-      this.lineSeries.update({
-        time: timestamp,
-        value: newVal,
-      })
+    currentCandle(value, oldVal) {
+      if (value > oldVal) this.priceDirection = '▲'
+      if (value < oldVal) this.priceDirection = '▼'
+      const data = {
+        open: value.o,
+        high: value.h,
+        low: value.l,
+        close: value.c,
+        time: value.t,
+      }
+      console.log(data)
+      this.lineSeries.update(data)
+    },
+    currentPrice(value, oldVal) {
+      if (value > oldVal) this.priceDirection = '▲'
+      if (value < oldVal) this.priceDirection = '▼'
+      const time = Math.floor(Date.now() / 1000)
+      const data = {
+        open: value - 1,
+        high: value + 2,
+        low: value - 2,
+        close: value + 1,
+        time,
+      }
+      this.lineSeries.update(data)
     },
   },
 }

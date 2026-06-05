@@ -1,4 +1,13 @@
 const apiUrl = 'https://api.binance.com/api/v3/ticker/'
+const apiUrl2 = 'https://api.binance.com/api/v3/klines?'
+
+const convertCandle = ([a]) => ({
+  t: +a[0],
+  o: +a[1],
+  h: +a[2],
+  l: +a[3],
+  c: +a[4],
+})
 
 function round(price) {
   price = parseFloat(price)
@@ -6,26 +15,24 @@ function round(price) {
   return +price
 }
 
-export async function getTickerBySymbol(symbol) {
+export async function getPriceBySymbol(symbol) {
   const resp = await fetch(`${apiUrl}price?symbol=${symbol}`)
   const json = await resp.json()
   return round(json.price)
 }
 
-export function wrap(cb) {
-  setInterval(async () => {
-    const price = await getTickerBySymbol('BTCUSDT')
-    cb(price)
-    return
-  }, 2000)
-  return
+export async function getPriceBySymbol2(symbol) {
+  const resp = await fetch(`${apiUrl2}symbol=${symbol}&interval=1m&limit=1`)
+  const json = await resp.json()
+  return convertCandle(json)
 }
 
-// wrap(x => {
-//   console.log('yo!', x)
-//   return
-// })
+export function priceUpdater(cb) {
+  setInterval(() => getPriceBySymbol('BTCUSDT').then(cb), 2000)
+}
 
-// wrap(console.log)
+export function priceUpdater2(cb) {
+  setInterval(() => getPriceBySymbol2('BTCUSDT').then(cb), 1000)
+}
 
-// wrap(console.log('yo!'))
+// [[1780692879000,"61516.72000000","61516.72000000","61516.71000000","61516.72000000","0.03570000",1780692879999,"2196.14687210",3,"0.03251000","1999.90856720","0"]]
