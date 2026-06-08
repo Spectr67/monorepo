@@ -1,5 +1,5 @@
 <script>
-import { priceUpdater, priceUpdater2 } from '@/api/tickerUpdater.js'
+import { priceUpdater2 } from '@/api/tickerUpdater.js'
 import { addSeriesToChart, createCustomChart } from '@/createChart.js'
 
 export default {

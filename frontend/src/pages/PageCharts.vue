@@ -1,28 +1,41 @@
 <script>
-import TokenChart from '@/components/TokenChart.vue'
-import { getAllTokens } from '../api/tickerUpdater.js'
+import TokenChart from '@/components/ChartWidget.vue'
+import { getSymbolsAll } from '../api/tickerUpdater.js'
 
 export default {
   components: { TokenChart },
   data() {
     return {
-      selectedSymbol: '',
-      coins: [],
+      selectedSymbol: 'BTCUSDT',
+      availableSymbols: [],
       isLoading: true,
+      quoteAsset: 'USDT',
     }
   },
 
   mounted() {
-    this.fetchAllUsdtPairs()
+    this.getSymbolsAll()
+  },
+
+  watch: {
+    availableSymbols(newVal) {
+      //
+    },
   },
 
   methods: {
-    async fetchAllUsdtPairs() {
+    async getSymbolsAll() {
       this.isLoading = true
-      this.coins = await getAllTokens()
-      const hasBitcoin = this.coins.some(c => c.value === 'BTCUSDT')
-      this.selectedSymbol = hasBitcoin ? 'BTCUSDT' : this.coins[0]?.value || ''
+      this.availableSymbols = await getSymbolsAll()
       this.isLoading = false
+      // this.firstSorting()
+    },
+
+    firstSorting() {
+      const findedIndex = this.availableSymbols.findIndex(c => c === 'BTCUSDT')
+      if (findedIndex === -1) return
+      this.selectedSymbol = this.availableSymbols.splice(1, findedIndex)
+      this.availableSymbols.unshift(this.selectedSymbol)
     },
   },
 }
@@ -41,8 +54,12 @@ export default {
       >
         <option v-if="isLoading" value="">Загрузка списка монет...</option>
 
-        <option v-for="coin in coins" :key="coin.value" :value="coin.value">
-          {{ coin.name }}
+        <option
+          v-for="symbol of availableSymbols"
+          :key="symbol"
+          :value="symbol"
+        >
+          {{ symbol.replace(quoteAsset, '') + ' / ' + quoteAsset }}
         </option>
       </select>
     </div>
