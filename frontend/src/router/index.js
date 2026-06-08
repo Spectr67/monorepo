@@ -4,6 +4,7 @@ import PageCars from '@/pages/PageCars.vue'
 import PageChart from '@/pages/PageChart.vue'
 import PageCoins from '@/pages/PageCoins.vue'
 import PageBitcoin from '@/pages/PageBitcoin.vue'
+import PageCharts from '@/pages/PageCharts.vue'
 const routes = [
   {
     path: '/',
@@ -25,6 +26,10 @@ const routes = [
   {
     path: '/bitcoin',
     component: PageBitcoin,
+  },
+  {
+    path: '/pageCharts',
+    component: PageCharts,
   },
 ]
 

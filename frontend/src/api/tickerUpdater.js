@@ -27,12 +27,27 @@ export async function getPriceBySymbol2(symbol) {
   return convertCandle(json)
 }
 
-export function priceUpdater(cb) {
-  setInterval(() => getPriceBySymbol('BTCUSDT').then(cb), 2000)
+export function priceUpdater(symbol, cb) {
+  setInterval(() => getPriceBySymbol(symbol).then(cb), 2000)
 }
 
-export function priceUpdater2(cb) {
-  setInterval(() => getPriceBySymbol2('BTCUSDT').then(cb), 1000)
+export function priceUpdater2(symbol, cb) {
+  setInterval(() => getPriceBySymbol2(symbol).then(cb), 1000)
 }
 
+export async function getAllTokens() {
+  const response = await fetch('https://api.binance.com/api/v3/exchangeInfo')
+  const data = await response.json()
+  const usdtPairs = data.symbols
+    .filter(
+      symbol => symbol.quoteAsset === 'USDT' && symbol.status === 'TRADING',
+    )
+    .map(symbol => ({
+      name: `${symbol.baseAsset} / ${symbol.quoteAsset}`,
+      value: symbol.symbol,
+    }))
+
+  usdtPairs.sort((a, b) => a.name.localeCompare(b.name))
+  return usdtPairs
+}
 // [[1780692879000,"61516.72000000","61516.72000000","61516.71000000","61516.72000000","0.03570000",1780692879999,"2196.14687210",3,"0.03251000","1999.90856720","0"]]

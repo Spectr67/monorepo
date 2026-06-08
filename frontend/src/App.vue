@@ -12,6 +12,9 @@ export default {}
         <li><RouterLink to="/chart" class="nav-item">chart</RouterLink></li>
         <li><RouterLink to="/coins" class="nav-item">coins</RouterLink></li>
         <li><RouterLink to="/bitcoin" class="nav-item">bitcoin</RouterLink></li>
+        <li>
+          <RouterLink to="/pageCharts" class="nav-item">charts</RouterLink>
+        </li>
       </ul>
     </nav>
 

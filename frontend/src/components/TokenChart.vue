@@ -1,11 +1,14 @@
 <script>
-import { priceUpdater, priceUpdater2 } from '@/api/tickerUpdater.js'
+import { priceUpdater2 } from '@/api/tickerUpdater.js'
 import { addSeriesToChart, createCustomChart } from '@/createChart.js'
 
 export default {
+  props: ['symbol'],
+
   data() {
     return {
       lineSeries: null,
+      chart: null,
       currentPrice: null,
       priceDirection: '',
       currentCandle: {
@@ -19,18 +22,16 @@ export default {
   },
 
   mounted() {
-    const chart = createCustomChart(this.$refs.chartContainer)
-    this.lineSeries = addSeriesToChart(chart)
-
-    priceUpdater2('BTCUSDT', candle => {
-      if (candle) {
-        this.currentCandle = candle
-        this.currentPrice = candle.c
-      }
-    })
+    this.chart = createCustomChart(this.$refs.chartContainer)
+    this.lineSeries = addSeriesToChart(this.chart)
+    this.startChartUpdates()
   },
 
   watch: {
+    symbol() {
+      this.startChartUpdates()
+    },
+
     currentCandle(value, oldVal) {
       if (oldVal && oldVal.c && value && value.c) {
         if (value.c > oldVal.c) this.priceDirection = '▲'
@@ -47,21 +48,26 @@ export default {
       this.lineSeries.update(data)
     },
   },
+
+  methods: {
+    startChartUpdates() {
+      this.currentPrice = 'Загрузка...'
+      this.priceDirection = ''
+
+      priceUpdater2(this.symbol, candle => {
+        if (candle) {
+          this.currentCandle = candle
+          this.currentPrice = candle.c
+        }
+      })
+    },
+  },
 }
 </script>
-<!-- 
-
-:class="{'price-up': priceDirection === '▲', 'price-down': priceDirection ===
-'▼'}
-
-:class="priceDirection === '▲' ? 'price-up' : 'price-down'" 
-
--->
-
 <template>
   <div class="crypto-container">
     <div class="price-board">
-      <h2>Bitcoin (BTC/USDT)</h2>
+      <h2>{{ symbol }}</h2>
 
       <div
         class="current-price"
@@ -78,53 +84,19 @@ export default {
     <div ref="chartContainer" class="chart-box"></div>
   </div>
 </template>
-
 <style scoped>
-.crypto-container {
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #1e222d;
-  padding: 20px;
-  border-radius: 8px;
-  width: 800px;
-  margin: 0 auto;
-  color: #ffffff;
-}
-
-.price-board {
-  margin-bottom: 15px;
-}
-
-h2 {
-  margin: 0 0 5px 0;
-  font-size: 1.2rem;
-  color: #848e9c;
-}
-
-.current-price {
-  font-size: 2.5rem;
-  font-weight: bold;
-  font-family: monospace;
-  transition: color 0.3s ease;
-  color: #ffffff;
-}
-
 .price-up {
-  color: #0ecb81;
+  color: #26a69a;
 }
-
 .price-down {
-  color: #f6465d;
+  color: #ef5350;
 }
-
 .direction-arrow {
-  font-size: 1.5rem;
   margin-left: 5px;
-  vertical-align: middle;
+  font-size: 0.8em;
 }
-
 .chart-box {
-  border-radius: 4px;
-  overflow: hidden;
+  height: 450px;
+  width: 100%;
 }
 </style>
