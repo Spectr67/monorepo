@@ -1,15 +1,14 @@
 <script>
-import TokenChart from '@/components/ChartWidget.vue'
+import ChartWidget from '@/components/ChartWidget.vue'
 import { getSymbolsAll } from '../api/tickerUpdater.js'
 
 export default {
-  components: { TokenChart },
+  components: { ChartWidget },
   data() {
     return {
       selectedSymbol: 'BTCUSDT',
       availableSymbols: [],
       isLoading: true,
-      quoteAsset: 'USDT',
     }
   },
 
@@ -28,14 +27,15 @@ export default {
       this.isLoading = true
       this.availableSymbols = await getSymbolsAll()
       this.isLoading = false
-      // this.firstSorting()
+      this.firstSorting()
     },
 
     firstSorting() {
       const findedIndex = this.availableSymbols.findIndex(c => c === 'BTCUSDT')
       if (findedIndex === -1) return
-      this.selectedSymbol = this.availableSymbols.splice(1, findedIndex)
-      this.availableSymbols.unshift(this.selectedSymbol)
+      const [selectedSymbol] = this.availableSymbols.splice(findedIndex, 1)
+      this.availableSymbols.unshift(selectedSymbol)
+      this.selectedSymbol = selectedSymbol
     },
   },
 }
@@ -44,7 +44,7 @@ export default {
 <template>
   <div class="selector-page">
     <div class="controls">
-      <label for="coin-select">Select Coin: </label>
+      <label for="coin-select">Select Coin:</label>
 
       <select
         id="coin-select"
@@ -59,12 +59,12 @@ export default {
           :key="symbol"
           :value="symbol"
         >
-          {{ symbol.replace(quoteAsset, '') + ' / ' + quoteAsset }}
+          {{ symbol.replace('USDT', '') + ' / ' + 'USDT' }}
         </option>
       </select>
     </div>
 
-    <TokenChart v-if="selectedSymbol && !isLoading" :symbol="selectedSymbol" />
+    <ChartWidget v-if="selectedSymbol && !isLoading" :symbol="selectedSymbol" />
   </div>
 </template>
 

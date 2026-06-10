@@ -1,5 +1,5 @@
 <script>
-import { priceUpdater2 } from '@/api/tickerUpdater.js'
+import { subscribeToSymbol } from '@/api/tickerUpdater.js'
 import { addSeriesToChart, createCustomChart } from '@/createChart.js'
 
 export default {
@@ -22,7 +22,7 @@ export default {
     const chart = createCustomChart(this.$refs.chartContainer)
     this.lineSeries = addSeriesToChart(chart)
 
-    priceUpdater2('BTCUSDT', candle => {
+    subscribeToSymbol('BTCUSDT', candle => {
       if (candle) {
         this.currentCandle = candle
         this.currentPrice = candle.c

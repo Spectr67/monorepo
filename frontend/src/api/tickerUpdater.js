@@ -21,19 +21,29 @@ export async function getPriceBySymbol2(symbol) {
   return convertCandle(json)
 }
 
-export function priceUpdater2(symbol, cb) {
-  setInterval(() => getPriceBySymbol2(symbol).then(cb), 1000)
+const symbolsIntervalsDict = {
+  xxxx: 0,
+}
+
+export function subscribeToSymbol(symbol, cb) {
+  const intervalId = setInterval(() => getPriceBySymbol2(symbol).then(cb), 1000)
+  symbolsIntervalsDict[symbol] = intervalId
+  console.log('подписались на:', symbol)
+}
+
+export function unsubscribeFromSymbol(symbol) {
+  clearInterval(symbolsIntervalsDict[symbol])
+  delete symbolsIntervalsDict[symbol]
+  console.log('отписались от:', symbol)
 }
 
 export async function getSymbolsAll() {
-  const response = await fetch('https://api.binance.com/api/v3/exchangeInfo')
-  const data = await response.json()
-  return data.symbols
-    .filter(
-      symbol => symbol.quoteAsset === 'USDT' && symbol.status === 'TRADING',
-    )
-    .map(symbol => symbol.symbol)
-  // .toSorted((a, b) => a.name.localeCompare(b.symbol))
+  const resp = await fetch('https://api.binance.com/api/v3/exchangeInfo')
+  const json = await resp.json()
+  return json.symbols
+    .filter(s => s.quoteAsset === 'USDT' && s.status === 'TRADING')
+    .map(s => s.symbol)
+    .toSorted()
 }
 
 // [[1780692879000,"61516.72000000","61516.72000000","61516.71000000","61516.72000000","0.03570000",1780692879999,"2196.14687210",3,"0.03251000","1999.90856720","0"]]

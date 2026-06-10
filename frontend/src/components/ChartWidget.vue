@@ -1,5 +1,8 @@
 <script>
-import { priceUpdater2 } from '@/api/tickerUpdater.js'
+import {
+  subscribeToSymbol,
+  unsubscribeFromSymbol,
+} from '@/api/tickerUpdater.js'
 import { addSeriesToChart, createCustomChart } from '@/createChart.js'
 
 export default {
@@ -9,7 +12,6 @@ export default {
     return {
       lineSeries: null,
       chart: null,
-      currentPrice: null,
       priceDirection: '',
       currentCandle: {
         o: 0,
@@ -24,12 +26,19 @@ export default {
   mounted() {
     this.chart = createCustomChart(this.$refs.chartContainer)
     this.lineSeries = addSeriesToChart(this.chart)
-    this.startChartUpdates()
+    subscribeToSymbol(this.symbol, candle => {
+      if (candle) this.currentCandle = candle
+      else this.currentCandle = null
+    })
   },
 
   watch: {
-    symbol() {
-      this.startChartUpdates()
+    symbol(value, oldVal) {
+      unsubscribeFromSymbol(oldVal)
+      subscribeToSymbol(value, candle => {
+        if (candle) this.currentCandle = candle
+        else this.currentCandle = null
+      })
     },
 
     currentCandle(value, oldVal) {
@@ -37,7 +46,6 @@ export default {
         if (value.c > oldVal.c) this.priceDirection = '▲'
         if (value.c < oldVal.c) this.priceDirection = '▼'
       }
-
       const data = {
         open: value.o,
         high: value.h,
@@ -50,17 +58,7 @@ export default {
   },
 
   methods: {
-    startChartUpdates() {
-      this.currentPrice = 'Загрузка...'
-      this.priceDirection = ''
-
-      priceUpdater2(this.symbol, candle => {
-        if (candle) {
-          this.currentCandle = candle
-          this.currentPrice = candle.c
-        }
-      })
-    },
+    startChartUpdates() {},
   },
 }
 </script>
@@ -76,7 +74,7 @@ export default {
           'price-down': priceDirection === '▼',
         }"
       >
-        ${{ currentPrice }}
+        ${{ currentCandle?.c ?? 'Загрузка...' }}
         <span class="direction-arrow">{{ priceDirection }}</span>
       </div>
     </div>
