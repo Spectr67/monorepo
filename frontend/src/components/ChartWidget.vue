@@ -31,14 +31,17 @@ export default {
       else this.currentCandle = null
     })
   },
-
+  beforeUnmount() {
+    unsubscribeFromSymbol(this.symbol)
+    this.chart.remove()
+  },
   watch: {
     symbol(value, oldVal) {
       unsubscribeFromSymbol(oldVal)
-      subscribeToSymbol(value, candle => {
-        if (candle) this.currentCandle = candle
-        else this.currentCandle = null
-      })
+      this.chart.remove()
+      this.priceDirection = ''
+
+      this.initChartAndSubscribe(value)
     },
 
     currentCandle(value, oldVal) {
@@ -59,6 +62,14 @@ export default {
 
   methods: {
     startChartUpdates() {},
+    initChartAndSubscribe(symbolName) {
+      this.chart = createCustomChart(this.$refs.chartContainer)
+      this.lineSeries = addSeriesToChart(this.chart)
+
+      subscribeToSymbol(symbolName, candle => {
+        this.currentCandle = candle
+      })
+    },
   },
 }
 </script>
