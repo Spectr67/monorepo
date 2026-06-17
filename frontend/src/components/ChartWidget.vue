@@ -24,12 +24,7 @@ export default {
   },
 
   mounted() {
-    this.chart = createCustomChart(this.$refs.chartContainer)
-    this.lineSeries = addSeriesToChart(this.chart)
-    subscribeToSymbol(this.symbol, candle => {
-      if (candle) this.currentCandle = candle
-      else this.currentCandle = null
-    })
+    this.initChartAndSubscribe(this.symbol)
   },
   beforeUnmount() {
     unsubscribeFromSymbol(this.symbol)
@@ -49,6 +44,7 @@ export default {
         if (value.c > oldVal.c) this.priceDirection = '▲'
         if (value.c < oldVal.c) this.priceDirection = '▼'
       }
+      if (!value) return
       const data = {
         open: value.o,
         high: value.h,
@@ -61,18 +57,19 @@ export default {
   },
 
   methods: {
-    startChartUpdates() {},
     initChartAndSubscribe(symbolName) {
       this.chart = createCustomChart(this.$refs.chartContainer)
       this.lineSeries = addSeriesToChart(this.chart)
-
       subscribeToSymbol(symbolName, candle => {
-        this.currentCandle = candle
+        if (candle) this.currentCandle = candle
+        else this.currentCandle = null
+        console.log('свеча обновилась для', symbolName)
       })
     },
   },
 }
 </script>
+
 <template>
   <div class="crypto-container">
     <div class="price-board">

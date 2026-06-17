@@ -25,8 +25,26 @@ const symbolsIntervalsDict = {
   xxxx: 0,
 }
 
+const symbolFlagsDict = {
+  xxxx: false,
+}
+
 export function subscribeToSymbol(symbol, cb) {
-  const intervalId = setInterval(() => getPriceBySymbol2(symbol).then(cb), 1000)
+  symbolFlagsDict[symbol] = true
+  const intervalId = setInterval(
+    () =>
+      getPriceBySymbol2(symbol).then(data => {
+        if (symbolFlagsDict[symbol]) {
+          cb(data)
+        } else {
+          console.log(
+            'обновление с сервера пришло, но игнорируем его, т.к. отписались уже от токена',
+            symbol,
+          )
+        }
+      }),
+    1000,
+  )
   symbolsIntervalsDict[symbol] = intervalId
   console.log('подписались на:', symbol)
 }
@@ -34,6 +52,7 @@ export function subscribeToSymbol(symbol, cb) {
 export function unsubscribeFromSymbol(symbol) {
   clearInterval(symbolsIntervalsDict[symbol])
   delete symbolsIntervalsDict[symbol]
+  symbolFlagsDict[symbol] = false
   console.log('отписались от:', symbol)
 }
 
