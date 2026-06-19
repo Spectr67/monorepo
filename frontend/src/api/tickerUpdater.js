@@ -15,8 +15,10 @@ function round(price) {
   return +price
 }
 
-export async function getPriceBySymbol2(symbol) {
-  const resp = await fetch(`${apiUrl2}symbol=${symbol}&interval=1s&limit=1`)
+export async function getPriceBySymbol2(symbol, interval) {
+  const resp = await fetch(
+    `${apiUrl2}symbol=${symbol}&interval=${interval}&limit=1`,
+  )
   const json = await resp.json()
   return convertCandle(json)
 }
@@ -29,31 +31,35 @@ const symbolFlagsDict = {
   xxxx: false,
 }
 
-export function subscribeToSymbol(symbol, cb) {
-  symbolFlagsDict[symbol] = true
+export function subscribeToSymbol(symbol, interval, cb) {
+  const key = `${symbol}_${interval}`
+
+  symbolFlagsDict[key] = true
   const intervalId = setInterval(
     () =>
-      getPriceBySymbol2(symbol).then(data => {
-        if (symbolFlagsDict[symbol]) {
+      getPriceBySymbol2(symbol, interval).then(data => {
+        if (symbolFlagsDict[key]) {
           cb(data)
         } else {
           console.log(
             'обновление с сервера пришло, но игнорируем его, т.к. отписались уже от токена',
-            symbol,
+            key,
           )
         }
       }),
     1000,
   )
-  symbolsIntervalsDict[symbol] = intervalId
-  console.log('подписались на:', symbol)
+  symbolsIntervalsDict[key] = intervalId
+  console.log('подписались на:', key)
 }
 
-export function unsubscribeFromSymbol(symbol) {
-  clearInterval(symbolsIntervalsDict[symbol])
-  delete symbolsIntervalsDict[symbol]
-  symbolFlagsDict[symbol] = false
-  console.log('отписались от:', symbol)
+export function unsubscribeFromSymbol(symbol, interval) {
+  const key = `${symbol}_${interval}`
+
+  clearInterval(symbolsIntervalsDict[key])
+  delete symbolsIntervalsDict[key]
+  symbolFlagsDict[key] = false
+  console.log('отписались от:', key)
 }
 
 export async function getSymbolsAll() {

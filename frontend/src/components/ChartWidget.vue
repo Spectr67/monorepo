@@ -6,7 +6,7 @@ import {
 import { addSeriesToChart, createCustomChart } from '@/createChart.js'
 
 export default {
-  props: ['symbol'],
+  props: ['symbol', 'interval'],
 
   data() {
     return {
@@ -24,19 +24,26 @@ export default {
   },
 
   mounted() {
-    this.initChartAndSubscribe(this.symbol)
+    this.initChartAndSubscribe(this.symbol, this.interval)
   },
   beforeUnmount() {
-    unsubscribeFromSymbol(this.symbol)
+    unsubscribeFromSymbol(this.symbol, this.interval)
     this.chart.remove()
   },
   watch: {
     symbol(value, oldVal) {
-      unsubscribeFromSymbol(oldVal)
+      unsubscribeFromSymbol(oldVal, this.interval)
       this.chart.remove()
       this.priceDirection = ''
 
-      this.initChartAndSubscribe(value)
+      this.initChartAndSubscribe(value, this.interval)
+    },
+    interval(value, oldVal) {
+      unsubscribeFromSymbol(this.symbol, oldVal)
+      this.chart.remove()
+      this.priceDirection = ''
+
+      this.initChartAndSubscribe(this.symbol, value)
     },
 
     currentCandle(value, oldVal) {
@@ -57,13 +64,14 @@ export default {
   },
 
   methods: {
-    initChartAndSubscribe(symbolName) {
+    initChartAndSubscribe(symbolName, intervalDuration) {
       this.chart = createCustomChart(this.$refs.chartContainer)
       this.lineSeries = addSeriesToChart(this.chart)
-      subscribeToSymbol(symbolName, candle => {
+
+      subscribeToSymbol(symbolName, intervalDuration, candle => {
         if (candle) this.currentCandle = candle
         else this.currentCandle = null
-        console.log('свеча обновилась для', symbolName)
+        console.log(`свеча обновилась для ${symbolName} (${intervalDuration})`)
       })
     },
   },

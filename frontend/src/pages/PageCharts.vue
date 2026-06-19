@@ -9,6 +9,18 @@ export default {
       selectedSymbol: 'BTCUSDT',
       availableSymbols: [],
       isLoading: true,
+      intervals: [
+        { value: '1s', label: '1 second' },
+        { value: '1m', label: '1 minute' },
+        { value: '5m', label: '5 minutes' },
+        { value: '15m', label: '15 minutes' },
+        { value: '30m', label: '30 minutes' },
+        { value: '1h', label: '1 hour' },
+        { value: '2h', label: '2 hours' },
+        { value: '4h', label: '4 hours' },
+        { value: '1d', label: '1 day' },
+      ],
+      selectedInterval: '1s',
     }
   },
 
@@ -45,7 +57,6 @@ export default {
   <div class="selector-page">
     <div class="controls">
       <label for="coin-select">Select Coin:</label>
-
       <select
         id="coin-select"
         v-model="selectedSymbol"
@@ -53,7 +64,6 @@ export default {
         :disabled="isLoading"
       >
         <option v-if="isLoading" value="">Загрузка списка монет...</option>
-
         <option
           v-for="symbol of availableSymbols"
           :key="symbol"
@@ -62,9 +72,25 @@ export default {
           {{ symbol.replace('USDT', '') + ' / ' + 'USDT' }}
         </option>
       </select>
+
+      <label for="interval-select" style="margin-left: 15px">Interval:</label>
+      <select
+        id="interval-select"
+        v-model="selectedInterval"
+        class="crypto-select"
+        :disabled="isLoading"
+      >
+        <option v-for="int in intervals" :key="int.value" :value="int.value">
+          {{ int.label }}
+        </option>
+      </select>
     </div>
 
-    <ChartWidget v-if="selectedSymbol && !isLoading" :symbol="selectedSymbol" />
+    <ChartWidget
+      v-if="selectedSymbol && !isLoading"
+      :symbol="selectedSymbol"
+      :interval="selectedInterval"
+    />
   </div>
 </template>
 
