@@ -1,7 +1,7 @@
 const apiUrl = 'https://api.binance.com/api/v3/ticker/'
 const apiUrl2 = 'https://api.binance.com/api/v3/klines?'
 
-const convertCandle = ([a]) => ({
+const convertCandle = a => ({
   t: round(a[0]),
   o: round(a[1]),
   h: round(a[2]),
@@ -17,10 +17,11 @@ function round(price) {
 
 export async function getPriceBySymbol2(symbol, interval) {
   const resp = await fetch(
-    `${apiUrl2}symbol=${symbol}&interval=${interval}&limit=10`,
+    `${apiUrl2}symbol=${symbol}&interval=${interval}&limit=100`,
   )
   const json = await resp.json()
-  return convertCandle(json)
+
+  return json.map(convertCandle)
 }
 
 const symbolsIntervalsDict = {

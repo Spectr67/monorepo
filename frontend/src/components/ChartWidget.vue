@@ -13,7 +13,7 @@ export default {
       lineSeries: null,
       chart: null,
       priceDirection: '',
-      currentCandle: {
+      currentCandles: {
         o: 0,
         h: 0,
         l: 0,
@@ -46,20 +46,21 @@ export default {
       this.initChartAndSubscribe(this.symbol, value)
     },
 
-    currentCandle(value, oldVal) {
-      if (oldVal && oldVal.c && value && value.c) {
-        if (value.c > oldVal.c) this.priceDirection = '▲'
-        if (value.c < oldVal.c) this.priceDirection = '▼'
-      }
+    currentCandles(value, oldVal) {
+      // if (oldVal && oldVal.c && value && value.c) {
+      //   if (value.c > oldVal.c) this.priceDirection = '▲'
+      //   if (value.c < oldVal.c) this.priceDirection = '▼'
+      // }
       if (!value) return
-      const data = {
-        open: value.o,
-        high: value.h,
-        low: value.l,
-        close: value.c,
-        time: value.t,
-      }
-      this.lineSeries.update(data)
+      const data = value.map(d => ({
+        open: d.o,
+        high: d.h,
+        low: d.l,
+        close: d.c,
+        time: d.t,
+      }))
+      console.log(data)
+      this.lineSeries.setData(data)
     },
   },
 
@@ -68,10 +69,11 @@ export default {
       this.chart = createCustomChart(this.$refs.chartContainer)
       this.lineSeries = addSeriesToChart(this.chart)
 
-      subscribeToSymbol(symbolName, intervalDuration, candle => {
-        if (candle) this.currentCandle = candle
-        else this.currentCandle = null
-        console.log(`свеча обновилась для ${symbolName} (${intervalDuration})`)
+      subscribeToSymbol(symbolName, intervalDuration, candles => {
+        console.log(candles)
+        if (candles) this.currentCandles = candles
+        else this.currentCandles = null
+        console.log(`свечи обновилась для ${symbolName} (${intervalDuration})`)
       })
     },
   },
@@ -90,7 +92,7 @@ export default {
           'price-down': priceDirection === '▼',
         }"
       >
-        ${{ currentCandle?.c ?? 'Загрузка...' }}
+        ${{ currentCandles?.c ?? 'Загрузка...' }}
         <span class="direction-arrow">{{ priceDirection }}</span>
       </div>
     </div>
