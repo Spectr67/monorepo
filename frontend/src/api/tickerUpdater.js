@@ -17,7 +17,7 @@ function round(price) {
 
 export async function getPriceBySymbol2(symbol, interval) {
   const resp = await fetch(
-    `${apiUrl2}symbol=${symbol}&interval=${interval}&limit=1`,
+    `${apiUrl2}symbol=${symbol}&interval=${interval}&limit=10`,
   )
   const json = await resp.json()
   return convertCandle(json)
@@ -63,7 +63,9 @@ export function unsubscribeFromSymbol(symbol, interval) {
 }
 
 export async function getSymbolsAll() {
-  const resp = await fetch('https://api.binance.com/api/v3/exchangeInfo')
+  const resp = await fetch(
+    'https://api.binance.com/api/v3/exchangeInfo?symbolStatus=TRADING&showPermissionSets=false ',
+  )
   const json = await resp.json()
   return json.symbols
     .filter(s => s.quoteAsset === 'USDT' && s.status === 'TRADING')

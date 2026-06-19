@@ -11,6 +11,7 @@ export default {
       isLoading: true,
       intervals: [
         { value: '1s', label: '1 second' },
+
         { value: '1m', label: '1 minute' },
         { value: '5m', label: '5 minutes' },
         { value: '15m', label: '15 minutes' },
